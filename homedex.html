@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Object Oriented Programming Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Atkinson Hyperlegible Next Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Atkinson Hyperlegible Next', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 32px 28px;
+      transition: transform 0.3s ease;
+    }
+    
+    .container:hover {
+      transform: translateY(-5px);
+    }
+    
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #1a2534;
+      margin-bottom: 28px;
+      letter-spacing: 0.4px;
+      font-weight: 700;
+      position: relative;
+    }
+    
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(to right, #4880e6, #6a9eff);
+      border-radius: 2px;
+    }
+    
+    .unit-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    .unit-block {
+      display: flex;
+      align-items: flex-start;
+      border-radius: 12px;
+      border: 1px solid #e4e7ec;
+      background: #f9fafc;
+      margin-bottom: 16px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      min-height: 68px;
+      padding-right: 0.5rem;
+      flex-direction: column;
+    }
+    
+    .unit-block:hover {
+      border-color: #c0d0f0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(72, 128, 230, 0.1);
+    }
+    
+    .unit-block.open {
+      background: #f0f6ff;
+      box-shadow: 0 6px 20px rgba(72, 128, 230, 0.12);
+      border-color: #b0d0ff;
+    }
+    
+    .unit-header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 12px 0;
+    }
+    
+    .unit-icon {
+      margin: 0 16px;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      width: 36px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .unit-icon-1 {
+      color: #e63946;
+    }
+    
+    .unit-icon-2 {
+      color: #2a9d8f;
+    }
+    
+    .unit-icon-3 {
+      color: #e9c46a;
+    }
+    
+    .unit-block.open .unit-icon {
+      transform: scale(1.1);
+    }
+    
+    .unit-info {
+      flex: 1;
+      padding-right: 10px;
+    }
+    
+    .unit-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1d2344;
+      margin: 0;
+      font-family: inherit;
+      transition: color 0.2s ease;
+    }
+    
+    .unit-block.open .unit-title {
+      color: #1e3a8a;
+    }
+    
+    .toggle-btn {
+      margin: 0 8px;
+      font-size: 1.6rem;
+      color: #7b8bb7;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      height: 32px;
+      width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 300;
+    }
+    
+    .toggle-btn:hover {
+      background-color: rgba(72, 128, 230, 0.1);
+      color: #4880e6;
+    }
+    
+    .unit-block.open .toggle-btn {
+      color: #315ecf;
+      background-color: rgba(49, 94, 207, 0.1);
+    }
+    
+    .unit-content {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 16px 0 68px;
+      background: none;
+      border: none;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      width: 100%;
+    }
+    
+    .unit-block.open .unit-content {
+      max-height: 2000px;
+      opacity: 1;
+      padding: 8px 16px 16px 68px;
+    }
+    
+    /* Chapter accordion styles */
+    .chapter-accordion {
+      padding: 0;
+      width: 100%;
+    }
+    
+    .chapter-item {
+      border-bottom: 1px solid #f1f5f9;
+      width: 100%;
+    }
+    
+    .chapter-item:last-child {
+      border-bottom: none;
+    }
+    
+    .chapter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      background-color: transparent;
+    }
+    
+    .chapter-header:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    .chapter-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #334155;
+    }
+    
+    .chapter-header i {
+      transition: transform 0.3s ease;
+      color: #64748b;
+    }
+    
+    .chapter-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background-color: transparent;
+    }
+    
+    .chapter-item.active .chapter-header i {
+      transform: rotate(180deg);
+    }
+    
+    .chapter-item.active .chapter-content {
+      max-height: 1000px;
+    }
+    
+    .lessons-list {
+      padding: 10px 0 10px 20px;
+      list-style-type: none;
+      width: 100%;
+    }
+    
+    .lesson-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+    }
+    
+    .lesson-item:last-child {
+      border-bottom: none;
+    }
+    
+    .lesson-link {
+      text-decoration: none;
+      color: #334155;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+    }
+    
+    .lesson-link:hover {
+      color: #0f172a;
+    }
+    
+    .lesson-link span {
+      text-decoration: underline;
+      text-decoration-color: #3b82f6;
+    }
+    
+    .lesson-icon {
+      margin-right: 15px;
+      color: #3b82f6;
+      font-size: 1.2rem;
+      transition: transform 0.2s ease;
+    }
+    
+    .lesson-link:hover .lesson-icon {
+      transform: scale(1.1);
+      color: #2563eb;
+    }
+    
+    .lesson-link:hover span {
+      text-decoration-color: #2563eb;
+    }
+    
+    /* Dark mode styles */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      }
+      
+      .container {
+        background: #1e293b;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      }
+      
+      h2 {
+        color: #f1f5f9;
+      }
+      
+      .unit-block {
+        background: #2d3748;
+        border-color: #4a5568;
+      }
+      
+      .unit-block:hover {
+        border-color: #718096;
+      }
+      
+      .unit-block.open {
+        background: #2d3748;
+        border-color: #63b3ed;
+      }
+      
+      .unit-title {
+        color: #e2e8f0;
+      }
+      
+      .unit-block.open .unit-title {
+        color: #90cdf4;
+      }
+      
+      .toggle-btn {
+        color: #a0aec0;
+      }
+      
+      .toggle-btn:hover {
+        background-color: rgba(66, 153, 225, 0.1);
+        color: #63b3ed;
+      }
+      
+      .unit-block.open .toggle-btn {
+        color: #63b3ed;
+        background-color: rgba(66, 153, 225, 0.1);
+      }
+      
+      .chapter-header h3 {
+        color: #e2e8f0;
+      }
+      
+      .lesson-item {
+        border-bottom-color: #4a5568;
+      }
+      
+      .lesson-link {
+        color: #cbd5e1;
+      }
+      
+      .lesson-link:hover {
+        color: #f1f5f9;
+      }
+      
+      .lesson-link span {
+        text-decoration-color: #63b3ed;
+      }
+    }
+    
+    @media (max-width: 660px) {
+      .container {
+        max-width: 98vw;
+        padding: 20px 16px;
+        margin: 10px;
+      }
+      
+      h2 {
+        font-size: 1.7rem;
+      }
+      
+      .unit-block {
+        flex-direction: column;
+        padding-right: 0;
+      }
+      
+      .unit-header {
+        padding: 10px 0;
+      }
+      
+      .toggle-btn {
+        align-self: center;
+        margin: 0 16px 0 0;
+      }
+      
+      .unit-content {
+        padding: 0 16px;
+      }
+      
+      .unit-block.open .unit-content {
+        padding: 8px 16px 16px 16px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .unit-title {
+        font-size: 1.1rem;
+      }
+      
+      .unit-icon {
+        margin: 0 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Object Oriented Programming Quiz</h2>
+    <ul class="unit-list">
+
+      <li class="unit-block" onclick="toggleUnit(this)">
+        <div class="unit-header">
+          <span class="unit-icon unit-icon-1">
+            <i class="fas fa-cube"></i>
+          </span>
+          <div class="unit-info">
+            <div class="unit-title">Unit 1</div>
+          </div>
+          <button class="toggle-btn" tabindex="-1">
+            <span class="plusminus">+</span>
+          </button>
+        </div>
+        <div class="unit-content">
+          <div class="chapter-accordion">
+            <!-- Chapter 1 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 1</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Introduction to C++ Programming</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Data types</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Manipulators in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>What are Pointers in C++?</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>String Handling in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Accessing the Class Members</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Chapter 2 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 2</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Inline Functions in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Function Overloading in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Chapter 3 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 3</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Friend Function in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Constructors and Destructors in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="unit-block" onclick="toggleUnit(this)">
+        <div class="unit-header">
+          <span class="unit-icon unit-icon-2">
+            <i class="fas fa-sitemap"></i>
+          </span>
+          <div class="unit-info">
+            <div class="unit-title">Unit 2</div>
+          </div>
+          <button class="toggle-btn" tabindex="-1">
+            <span class="plusminus">+</span>
+          </button>
+        </div>
+        <div class="unit-content">
+          <div class="chapter-accordion">
+            <!-- Chapter 1 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 1</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Introduction to Inheritance</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Types Of Inheritance in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Understanding Virtual Base Classes</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Function overloading in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Nested class in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Polymorphism in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Chapter 2 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 2</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Function Overloading in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Operator Overloading in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Chapter 3 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 3</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Exception handling in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>User-defined Exception in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="unit-block" onclick="toggleUnit(this)">
+        <div class="unit-header">
+          <span class="unit-icon unit-icon-3">
+            <i class="fas fa-cogs"></i>
+          </span>
+          <div class="unit-info">
+            <div class="unit-title">Unit 3</div>
+          </div>
+          <button class="toggle-btn" tabindex="-1">
+            <span class="plusminus">+</span>
+          </button>
+        </div>
+        <div class="unit-content">
+          <div class="chapter-accordion">
+            <!-- Chapter 1 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 1</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Memory Management in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>C++ Stream and Stream Classes</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>C++ File Operations & Memory Management</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>File I/O, Reading/Writing of files</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Introduction to Templates in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Types of Templates in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Chapter 2 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 2</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>Creating Templates in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>STL Queue in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <!-- Chapter 3 -->
+            <div class="chapter-item">
+              <div class="chapter-header">
+                <h3>Chapter 3</h3>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="chapter-content">
+                <ul class="lessons-list">
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>STL Vector in C++</span>
+                    </a>
+                  </li>
+                  <li class="lesson-item">
+                    <a href="#" class="lesson-link">
+                      <i class="fas fa-play-circle lesson-icon"></i>
+                      <span>STL Map in C++</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+  <script>
+    function toggleUnit(el) {
+      // Close others and reset buttons
+      document.querySelectorAll('.unit-block').forEach(block => {
+        if(block !== el) {
+          block.classList.remove('open');
+          block.querySelector('.plusminus').textContent = "+";
+        }
+      });
+      
+      // Toggle clicked block
+      const isOpen = el.classList.contains('open');
+      el.classList.toggle('open');
+      el.querySelector('.plusminus').textContent = isOpen ? "+" : "−";
+    }
+    
+    // Chapter accordion functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const chapterHeaders = document.querySelectorAll('.chapter-header');
+      
+      chapterHeaders.forEach(header => {
+        header.addEventListener('click', function(event) {
+          // Stop event from bubbling up to parent elements
+          event.stopPropagation();
+          const item = this.parentElement;
+          item.classList.toggle('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
